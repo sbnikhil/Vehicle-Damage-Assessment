@@ -1,4 +1,4 @@
-# ArtificialIntelligence
+# Artificial Intelligence
 
 
 # Intelligent Vehicle Damage Assessment & Cost Estimator for Insurance Companies

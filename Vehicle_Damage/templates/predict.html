@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@0.7.4/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #ffffff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    form {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .custom-file-upload {
+      display: inline-block;
+      padding: 6px 12px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: #ffffff;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    .custom-file-upload:hover {
+      background-color: #0056b3;
+    }
+
+    button[type="submit"] {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+  </style>
+
+</head>
+<body>
+  <div class="container">
+    <h1>UPLOAD YOUR IMAGE HERE AND ASSESS THE DAMAGE COST</h1>
+    <form id="imageForm" action="#" enctype="multipart/form-data">
+      <label for="imageUpload">Select an image:</label>
+      <div class="flex-col flex items-center">
+        <div class="flex"> 
+          <label class="custom-file-upload">
+            <input type="file" id="imageUpload" name="imageUpload" accept="image/*">
+            Browse
+          </label>
+        </div>
+        <div class="flex">
+          <button type="submit">Upload</button>  
+        </div>
+        <div class="flex">
+          <label id="answer"></label>
+        </div>
+      </div>
+    </form>
+  </div>
+  
+  <script>
+    const form = document.getElementById('imageForm');
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const fileInput = document.getElementById('imageUpload');
+      const file = fileInput.files[0];
+
+      const formData = new FormData();
+      formData.append('imageUpload', file);
+
+      fetch('/predict', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.text())
+      .then(result => {
+        console.log(result)
+        // Display the result to the user
+        const resultContainer = document.getElementById('answer');
+        resultContainer.innerHTML = `<p>The estimated damage cost is: ${result}</p>`;
+        form.appendChild(resultContainer);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    });
+  </script>
+
+</body></html>
